@@ -1,6 +1,6 @@
 # Карта покемонов
 
-![sample text](https://dvmn.org/filer/canonical/1563275070/172/)
+![sample text](https://www.radikal.kz/images/2019/09/23/BEZYMYNNYI.jpg)
 
 ### Предметная область
 
@@ -19,6 +19,14 @@
 - Скачайте код
 - Установите зависимости командой `pip install -r requirements.txt`
 - Запустите сервер командой `python3 manage.py runserver`
+
+
+python manage.py migrate
+
+python manage.py createsuperuser
+
+python manage.py runserver
+
 
 ### Переменные окружения
 
