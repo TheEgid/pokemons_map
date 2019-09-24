@@ -40,7 +40,6 @@ def show_all_pokemons(request):
             'img_url': pokemon.img_url.url,
         })
 
-
     return render(request, "mainpage.html", context={
         'map': folium_map._repr_html_(),
         'pokemons': pokemons_on_page,
@@ -54,11 +53,24 @@ def show_pokemon(request, pokemon_id):
         if pokemon.id == int(pokemon_id):
             requested_pokemon = pokemon
             requested_pokemon.img_url = make_img_url(requested_pokemon, request)
+            pokemon_previous_evolution = requested_pokemon.previous_evolution
+            pokemon_next_evolution = requested_pokemon.next_evolution
             break
     else:
         return HttpResponseNotFound('<h1>Такой покемон не найден</h1>')
 
-    for pokemon_entity in PokemonEntity.objects.filter(pokemon_id=requested_pokemon.id):
+    if pokemon_previous_evolution:
+        pokemon.previous_evolution.pokemon_id = pokemon_previous_evolution.id
+        pokemon.previous_evolution.img_url = make_img_url(
+            pokemon_previous_evolution, request)
+
+    if pokemon_next_evolution:
+            pokemon.next_evolution.pokemon_id = pokemon_next_evolution.id
+            pokemon.next_evolution.img_url = make_img_url(
+                pokemon_next_evolution, request)
+
+    for pokemon_entity in PokemonEntity.objects.filter(
+            pokemon_id=requested_pokemon.id):
         img_url = make_img_url(pokemon_entity.pokemon, request)
         add_pokemon(folium_map, pokemon_entity.lat, pokemon_entity.lon,
                     pokemon_entity.pokemon.title_ru, img_url)

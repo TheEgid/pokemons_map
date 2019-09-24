@@ -6,12 +6,18 @@ class Pokemon(models.Model):
     img_url = models.ImageField(verbose_name='изображение')
     title_ru = models.CharField(verbose_name='наименование рус',
                                 max_length=200)
-    title_en = models.CharField(verbose_name='наименование англ', blank=True, null=True,
-                                max_length=200)
-    title_jp = models.CharField(verbose_name='наименование яп', blank=True, null=True,
-                                max_length=200)
+    title_en = models.CharField(verbose_name='наименование англ', blank=True,
+                                null=True, max_length=200)
+    title_jp = models.CharField(verbose_name='наименование яп', blank=True,
+                                null=True, max_length=200)
     description = models.TextField(verbose_name='описание', max_length=10000,
                                    blank=True, null=True)
+    previous_evolution = models.ForeignKey('self', blank=True, null=True,
+                                           on_delete=models.SET_NULL,
+                                           verbose_name='Из кого эволюционировал')
+    next_evolution = models.ForeignKey('self', blank=True, null=True,
+                                       related_name='+', on_delete=models.SET_NULL,
+                                       verbose_name='В кого эволюционирует')
 
     def __str__(self):
         return self.title_ru
@@ -32,7 +38,8 @@ class PokemonEntity(models.Model):
     health = models.IntegerField(verbose_name='здоровье', default=0, blank=True)
     strength = models.IntegerField(verbose_name='сила', default=0, blank=True)
     defence = models.IntegerField(verbose_name='защита', default=0, blank=True)
-    stamina = models.IntegerField(verbose_name='выносливость', default=0, blank=True)
+    stamina = models.IntegerField(verbose_name='выносливость', default=0,
+                                  blank=True)
 
 
     def __str__(self):
