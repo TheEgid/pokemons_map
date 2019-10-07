@@ -2,7 +2,6 @@ from django.db import models
 
 
 class Pokemon(models.Model):
-    id = models.AutoField(auto_created=True, primary_key=True)
     img_url = models.ImageField(verbose_name='изображение')
     title_ru = models.CharField(verbose_name='наименование рус',
                                 max_length=200)
@@ -24,7 +23,6 @@ class Pokemon(models.Model):
 
 
 class PokemonEntity(models.Model):
-    id = models.AutoField(auto_created=True, primary_key=True)
     pokemon = models.ForeignKey(Pokemon, verbose_name='покемон',
                                 on_delete=models.CASCADE)
     lat = models.FloatField(verbose_name='широта')
