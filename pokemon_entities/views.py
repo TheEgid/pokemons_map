@@ -1,5 +1,6 @@
 import folium
 from django.http import HttpResponseNotFound
+from django.shortcuts import get_object_or_404
 from django.shortcuts import render
 from .models import Pokemon, PokemonEntity
 
@@ -50,12 +51,11 @@ def show_pokemon(request, pokemon_id):
     folium_map = folium.Map(location=MOSCOW_CENTER, zoom_start=10)
 
     for pokemon in Pokemon.objects.all():
-        if pokemon.id == int(pokemon_id):
-            requested_pokemon = pokemon
-            requested_pokemon.img_url = make_img_url(requested_pokemon, request)
-            pokemon_previous_evolution = requested_pokemon.previous_evolution
-            pokemon_next_evolution = requested_pokemon.next_evolution
-            break
+        requested_pokemon = get_object_or_404(Pokemon, pokemon.id=int(pokemon_id))	
+        requested_pokemon.img_url = make_img_url(requested_pokemon, request)
+        pokemon_previous_evolution = requested_pokemon.previous_evolution
+        pokemon_next_evolution = requested_pokemon.next_evolution
+        break
     else:
         return HttpResponseNotFound('<h1>Такой покемон не найден</h1>')
 
