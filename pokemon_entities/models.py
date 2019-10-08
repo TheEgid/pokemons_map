@@ -2,15 +2,15 @@ from django.db import models
 
 
 class Pokemon(models.Model):
-    img_url = models.ImageField(verbose_name='изображение')
-    title_ru = models.CharField(verbose_name='наименование рус',
+    img_file = models.ImageField(verbose_name='изображение')
+    title_ru = models.CharField(verbose_name='наименование рус', null=False,
                                 max_length=200)
     title_en = models.CharField(verbose_name='наименование англ', blank=True,
-                                null=True, max_length=200)
+                                null=False, max_length=200)
     title_jp = models.CharField(verbose_name='наименование яп', blank=True,
-                                null=True, max_length=200)
+                                null=False, max_length=200)
     description = models.TextField(verbose_name='описание', max_length=10000,
-                                   blank=True, null=True)
+                                   blank=True, null=False)
     previous_evolution = models.ForeignKey('self', blank=True, null=True,
                                            on_delete=models.SET_NULL,
                                            verbose_name='Из кого эволюционировал')

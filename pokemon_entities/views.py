@@ -10,7 +10,7 @@ DEFAULT_IMAGE_URL = "https://vignette.wikia.nocookie.net/pokemon/images/6/6e/%21
 
 
 def make_img_url(pokemon, request):
-    return request.build_absolute_uri(pokemon.img_url.url)
+    return request.build_absolute_uri(pokemon.img_file.url)
 
 
 def add_pokemon(folium_map, lat, lon, name, image_url=DEFAULT_IMAGE_URL):
@@ -33,12 +33,11 @@ def show_all_pokemons(request):
             pokemon_entity.pokemon.title_ru, img_url)
 
     pokemons_on_page = []
-    pokemons = Pokemon.objects.all()
-    for pokemon in pokemons:
+    for pokemon in Pokemon.objects.all():
         pokemons_on_page.append({
             'pokemon_id': pokemon.id,
             'title_ru': pokemon.title_ru,
-            'img_url': pokemon.img_url.url,
+            'img_url': pokemon.img_file.url,
         })
 
     return render(request, "mainpage.html", context={
@@ -49,24 +48,21 @@ def show_all_pokemons(request):
 
 def show_pokemon(request, pokemon_id):
     folium_map = folium.Map(location=MOSCOW_CENTER, zoom_start=10)
-
-    for pokemon in Pokemon.objects.all():
-        requested_pokemon = get_object_or_404(Pokemon, pokemon.id=int(pokemon_id))	
-        requested_pokemon.img_url = make_img_url(requested_pokemon, request)
-        pokemon_previous_evolution = requested_pokemon.previous_evolution
-        pokemon_next_evolution = requested_pokemon.next_evolution
-        break
-    else:
-        return HttpResponseNotFound('<h1>Такой покемон не найден</h1>')
+    requested_pokemon = get_object_or_404(Pokemon, pk=int(pokemon_id))
+    requested_pokemon.img_url = make_img_url(requested_pokemon, request)
+    pokemon_previous_evolution = requested_pokemon.previous_evolution
+    pokemon_next_evolution = requested_pokemon.next_evolution
 
     if pokemon_previous_evolution:
-        pokemon.previous_evolution.pokemon_id = pokemon_previous_evolution.id
-        pokemon.previous_evolution.img_url = make_img_url(
+        requested_pokemon.previous_evolution.pokemon_id = \
+            pokemon_previous_evolution.id
+        requested_pokemon.previous_evolution.img_url = make_img_url(
             pokemon_previous_evolution, request)
 
     if pokemon_next_evolution:
-            pokemon.next_evolution.pokemon_id = pokemon_next_evolution.id
-            pokemon.next_evolution.img_url = make_img_url(
+            requested_pokemon.next_evolution.pokemon_id = \
+                pokemon_next_evolution.id
+            requested_pokemon.next_evolution.img_url = make_img_url(
                 pokemon_next_evolution, request)
 
     for pokemon_entity in PokemonEntity.objects.filter(
