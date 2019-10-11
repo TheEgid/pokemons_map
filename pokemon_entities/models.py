@@ -13,10 +13,12 @@ class Pokemon(models.Model):
                                    blank=True, null=False)
     previous_evolution = models.ForeignKey('self', blank=True, null=True,
                                            on_delete=models.SET_NULL,
+										   related_name='next_evolutions',
                                            verbose_name='Из кого эволюционировал')
-    next_evolution = models.ForeignKey('self', blank=True, null=True,
-                                       related_name='+', on_delete=models.SET_NULL,
-                                       verbose_name='В кого эволюционирует')
+    
+    #next_evolution = models.ForeignKey('self', blank=True, null=True,
+     #                                  related_name='+', on_delete=models.SET_NULL,
+     #                                  verbose_name='В кого эволюционирует')
 
     def __str__(self):
         return self.title_ru
