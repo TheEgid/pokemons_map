@@ -13,12 +13,8 @@ class Pokemon(models.Model):
                                    blank=True, null=False)
     previous_evolution = models.ForeignKey('self', blank=True, null=True,
                                            on_delete=models.SET_NULL,
-										   related_name='next_evolutions',
+                                           related_name='next_evolutions',
                                            verbose_name='Из кого эволюционировал')
-    
-    #next_evolution = models.ForeignKey('self', blank=True, null=True,
-     #                                  related_name='+', on_delete=models.SET_NULL,
-     #                                  verbose_name='В кого эволюционирует')
 
     def __str__(self):
         return self.title_ru
@@ -26,6 +22,7 @@ class Pokemon(models.Model):
 
 class PokemonEntity(models.Model):
     pokemon = models.ForeignKey(Pokemon, verbose_name='покемон',
+                                related_name='pokemon_all_entities',
                                 on_delete=models.CASCADE)
     lat = models.FloatField(verbose_name='широта')
     lon = models.FloatField(verbose_name='долгота')
