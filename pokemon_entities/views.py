@@ -26,7 +26,8 @@ def add_pokemon(folium_map, lat, lon, name, image_url=DEFAULT_IMAGE_URL):
 
 def show_all_pokemons(request):
     folium_map = folium.Map(location=MOSCOW_CENTER, zoom_start=10)
-    for pokemon_entity in PokemonEntity.objects.all():
+    for pokemon_entity in \
+            PokemonEntity.objects.prefetch_related('pokemon').all():
         img_url = make_img_url(pokemon_entity.pokemon, request)
         add_pokemon(folium_map, pokemon_entity.lat, pokemon_entity.lon,
                     pokemon_entity.pokemon.title_ru, img_url)
@@ -47,27 +48,40 @@ def show_all_pokemons(request):
 
 def show_pokemon(request, pokemon_id):
     folium_map = folium.Map(location=MOSCOW_CENTER, zoom_start=10)
-    requested_pokemon = get_object_or_404(Pokemon, pk=int(pokemon_id))
-    requested_pokemon.img_url = make_img_url(requested_pokemon, request)
-    pokemon_previous_evolution = requested_pokemon.previous_evolution
+    requested_pokemon = \
+        Pokemon.objects.prefetch_related('pokemon_all_entities').get(id=pokemon_id)
+
+    pokemon_on_page = {
+        'pokemon_id': requested_pokemon.id,
+        'title_ru': requested_pokemon.title_ru,
+        'title_en': requested_pokemon.title_en,
+        'title_jp': requested_pokemon.title_jp,
+        'description': requested_pokemon.description,
+        'img_url': make_img_url(requested_pokemon, request),
+    }
 
     try:
-        requested_pokemon.previous_evolution.pokemon_id = \
-            pokemon_previous_evolution.id
-        requested_pokemon.previous_evolution.img_url = make_img_url(
-            pokemon_previous_evolution, request)
-    except AttributeError:
-        requested_pokemon.previous_evolution = None
+        pokemon_previous_evolution = requested_pokemon.previous_evolution
+        if pokemon_previous_evolution:
+            pokemon_on_page.update({'previous_evolution': {
+                'pokemon_id': pokemon_previous_evolution.id,
+                'title_ru': pokemon_previous_evolution.title_ru,
+                'title_en': pokemon_previous_evolution.title_en,
+                'title_jp': pokemon_previous_evolution.title_jp,
+                'img_url': make_img_url(pokemon_previous_evolution, request),
+            }})
 
-    try:
-        pokemon_next_evolution = requested_pokemon.next_evolutions.all()[0]
-        setattr(requested_pokemon, 'next_evolution', pokemon_next_evolution)
-        requested_pokemon.next_evolution.pokemon_id = \
-            pokemon_next_evolution.id
-        requested_pokemon.next_evolution.img_url = make_img_url(
-            pokemon_next_evolution, request)
+        pokemon_next_evolution = requested_pokemon.next_evolutions.first()
+        if pokemon_next_evolution:
+            pokemon_on_page.update({'next_evolution': {
+                'pokemon_id': pokemon_next_evolution.id,
+                'title_ru': pokemon_next_evolution.title_ru,
+                'title_en': pokemon_next_evolution.title_en,
+                'title_jp': pokemon_next_evolution.title_jp,
+                'img_url': make_img_url(pokemon_next_evolution, request),
+            }})
     except (IndexError, AttributeError):
-        requested_pokemon.next_evolution = None
+        pass
 
     for pokemon_entity in requested_pokemon.pokemon_all_entities.all():
         img_url = make_img_url(pokemon_entity.pokemon, request)
@@ -76,5 +90,5 @@ def show_pokemon(request, pokemon_id):
 
     return render(request, "pokemon.html", context={
         'map': folium_map._repr_html_(),
-        'pokemon': requested_pokemon
+        'pokemon': pokemon_on_page,
     })
