@@ -1,5 +1,5 @@
 folium==0.10.1
 Django==3.0.5
 python-dotenv==0.10.3
-Pillow==6.2.2
+Pillow==7.0.0
 psycopg2==2.8.4
