@@ -1,6 +1,6 @@
 # Карта покемонов
 
-![sample text](https://www.radikal.kz/images/2019/09/23/BEZYMYNNYI.jpg)
+![sample text](https://i.ibb.co/tXD20G6/image.jpg)
 
 ### Предметная область
 
@@ -22,12 +22,12 @@
 - `SECRET_KEY` — секретный ключ проекта
 
 
-Python 3.7 должен быть уже установлен. Затем используйте pip для установки зависимостей:
+Python должен быть уже установлен. Затем используйте pip для установки зависимостей:
 
 ```
 pip install -r requirements.txt
 ```
-создаем БД 
+создаем БД
 ```
 python manage.py migrate
 ```
@@ -43,7 +43,7 @@ python manage.py runserver
 
 Заполняем значения базы данных покемонов через панель администрирования, используя суперпользователя.
 
-http://{ваш_localhost}:8000/admin
+**http://{ваш_localhost}:8000/admin**
 
 
 ### Работоспособность результата
