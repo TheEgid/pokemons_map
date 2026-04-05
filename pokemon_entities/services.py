@@ -23,13 +23,27 @@ class MapMarker:
     lon: float
     name: str
     image_url: str
+    pokemon_id: int
 
     def add_to_map(self, folium_map: folium.Map) -> None:
         icon = folium.features.CustomIcon(self.image_url, icon_size=(50, 50))
+
+        popup_html = f"""
+        <div style="text-align: center; min-width: 150px;">
+            <img src="{self.image_url}" style="width: 80px; height: 80px; object-fit: contain;" />
+            <p style="font-weight: bold; margin: 5px 0;">{self.name}</p>
+            <a href="/pokemon/{self.pokemon_id}/" target="_top" style="color: #333; text-decoration: underline;">
+                Подробнее
+            </a>
+        </div>
+        """
+        popup = folium.Popup(popup_html, max_width=200)
+
         folium.Marker(
             location=[self.lat, self.lon],
             tooltip=self.name,
             icon=icon,
+            popup=popup,
         ).add_to(folium_map)
 
 
@@ -70,6 +84,7 @@ def create_pokemon_markers(
             lon=entity.lon,
             name=entity.pokemon.title_ru,
             image_url=make_img_url(entity.pokemon, request),
+            pokemon_id=entity.pokemon.id,
         )
         for entity in entities
     ]

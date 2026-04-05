@@ -1,0 +1,157 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>{% block title %}Pokemon Go Map{% endblock %}</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+  <link rel="icon" href="https://assets.pokemon.com/static2/_ui/img/favicon.ico">
+  <style>
+    .header {
+      background: linear-gradient(135deg, #641220 0%, #a4262c 100%);
+      padding: 2rem 0;
+      margin-bottom: 2rem;
+      position: relative;
+      overflow: hidden;
+      box-shadow: 0 4px 15px rgba(0,0,0,0.3);
+    }
+
+    .header::before {
+      content: '';
+      position: absolute;
+      top: -50%;
+      left: -50%;
+      width: 200%;
+      height: 200%;
+      background: radial-gradient(circle, rgba(255,255,255,0.05) 0%, transparent 70%);
+      animation: headerGlow 8s ease-in-out infinite;
+    }
+
+    @keyframes headerGlow {
+      0%, 100% { transform: translate(0, 0); }
+      50% { transform: translate(20%, 20%); }
+    }
+
+    .header-content {
+      position: relative;
+      z-index: 1;
+    }
+
+    .header-title {
+      color: #fff;
+      font-weight: 800;
+      font-size: 2.5rem;
+      text-shadow: 2px 2px 4px rgba(0,0,0,0.5);
+    }
+
+    .pokeball-icon {
+      width: 60px;
+      height: 60px;
+      animation: spin 4s linear infinite;
+      filter: drop-shadow(2px 2px 4px rgba(0,0,0,0.5));
+    }
+
+    @keyframes spin {
+      0% { transform: rotate(0deg); }
+      100% { transform: rotate(360deg); }
+    }
+
+    .header-nav {
+      background: rgba(0,0,0,0.3);
+      backdrop-filter: blur(10px);
+      border-radius: 10px;
+      padding: 0.5rem 1rem;
+      border: 1px solid rgba(255,255,255,0.1);
+    }
+
+    .header-nav a {
+      color: #fff;
+      text-decoration: none;
+      font-weight: 600;
+      transition: all 0.3s ease;
+    }
+
+    .header-nav a:hover {
+      color: #ffd700;
+      transform: scale(1.05);
+    }
+
+    .floating-dots {
+      position: absolute;
+      width: 100%;
+      height: 100%;
+      top: 0;
+      left: 0;
+      pointer-events: none;
+    }
+
+    .floating-dot {
+      position: absolute;
+      width: 10px;
+      height: 10px;
+      background: rgba(255,255,255,0.7);
+      border: 2px solid rgba(255,255,255,0.9);
+      border-radius: 50%;
+      animation: float 6s ease-in-out infinite;
+    }
+
+    .floating-dot:nth-child(1) { left: 10%; top: 20%; animation-delay: 0s; }
+    .floating-dot:nth-child(2) { left: 30%; top: 60%; animation-delay: 1s; }
+    .floating-dot:nth-child(3) { left: 50%; top: 30%; animation-delay: 2s; }
+    .floating-dot:nth-child(4) { left: 70%; top: 70%; animation-delay: 3s; }
+    .floating-dot:nth-child(5) { left: 90%; top: 40%; animation-delay: 4s; }
+
+    @keyframes float {
+      0%, 100% { transform: translateY(0) scale(1); opacity: 0.4; }
+      50% { transform: translateY(-20px) scale(1.5); opacity: 0.8; }
+    }
+
+    footer {
+      margin-top: auto;
+    }
+  </style>
+  {% block extra_css %}{% endblock %}
+</head>
+<body class="d-flex flex-column min-vh-100">
+  <header class="header">
+    <div class="floating-dots">
+      <div class="floating-dot"></div>
+      <div class="floating-dot"></div>
+      <div class="floating-dot"></div>
+      <div class="floating-dot"></div>
+      <div class="floating-dot"></div>
+    </div>
+    <div class="container header-content">
+      <div class="d-flex align-items-center justify-content-between">
+        <a href="{% url 'index' %}" class="d-flex align-items-center text-decoration-none">
+          <svg class="pokeball-icon me-3" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+            <circle cx="50" cy="50" r="48" fill="#fff" stroke="#333" stroke-width="4"/>
+            <path d="M2,50 L98,50" stroke="#333" stroke-width="4"/>
+            <path d="M2,50 A48,48 0 0,1 98,50" fill="#ff4444"/>
+            <circle cx="50" cy="50" r="15" fill="#fff" stroke="#333" stroke-width="4"/>
+            <circle cx="50" cy="50" r="8" fill="#fff" stroke="#333" stroke-width="3"/>
+          </svg>
+          <span class="header-title">Pokemon Go Map</span>
+        </a>
+        <nav class="header-nav">
+          <a href="{% url 'index' %}">Главная</a>
+        </nav>
+      </div>
+    </div>
+  </header>
+
+  <main class="container py-5 flex-grow-1">
+    {% block content %}{% endblock %}
+  </main>
+
+  <footer class="py-3" style="background: #2c2c2c; color: #fff; border-top: 1px solid #444;">
+    <div class="container text-center">
+      <p class="mb-0" style="opacity: 0.7; font-size: 0.85rem;">Pokemon Go Map &copy; 2026</p>
+    </div>
+  </footer>
+
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+  {% block extra_js %}{% endblock %}
+</body>
+</html>
