@@ -1,8 +1,5 @@
-from typing import Annotated
-
 from django.http import HttpRequest, HttpResponse
 from django.shortcuts import render
-from django.views import View
 from django.views.decorators.http import require_http_methods
 
 from .models import Pokemon, PokemonEntity
@@ -26,7 +23,11 @@ def index(request: HttpRequest) -> HttpResponse:
     ]
 
     context = MapContext(map_html=folium_map._repr_html_(), pokemons=pokemons)
-    return render(request, "mainpage.html", context={"map": context.map_html, "pokemons": context.pokemons})
+    return render(
+        request,
+        "mainpage.html",
+        context={"map": context.map_html, "pokemons": context.pokemons},
+    )
 
 
 @require_http_methods(["GET"])

@@ -1,10 +1,11 @@
 from dataclasses import dataclass
 from typing import TYPE_CHECKING
 
-import folium # pyright: ignore[reportMissingImports]
+import folium  # type: ignore[reportMissingImports]
+from branca.element import Element
 
 if TYPE_CHECKING:
-    from django.http import HttpRequest # type: ignore
+    from django.http import HttpRequest  # type: ignore
 
     from .models import Pokemon, PokemonEntity
 
@@ -33,9 +34,25 @@ class MapMarker:
 
 
 def build_map(*markers: MapMarker) -> folium.Map:
-    result = folium.Map(location=MOSCOW_CENTER, zoom_start=10)
+    result = folium.Map(
+        location=MOSCOW_CENTER,
+        zoom_start=12,
+        tiles="https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png",
+        attr=" ",
+    )
+
+    # Hide attribution via Branca Element injection
+    try:
+        style = Element(
+            "<style>.leaflet-control-attribution { display: none !important; }</style>"
+        )
+        result.get_root().html.add_child(style)
+    except Exception:
+        pass
+
     for marker in markers:
         marker.add_to_map(result)
+
     return result
 
 

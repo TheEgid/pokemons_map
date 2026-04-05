@@ -1,7 +1,4 @@
-from datetime import datetime  # noqa: F401
-from typing import Annotated  # noqa: F401
-
-from pydantic import BaseModel, ConfigDict, Field # type: ignore
+from pydantic import BaseModel, ConfigDict
 
 
 class EvolutionInfo(BaseModel):
@@ -17,7 +14,7 @@ class EvolutionInfo(BaseModel):
 class PokemonBase(BaseModel):
     model_config = ConfigDict(from_attributes=True)
 
-    pokemon_id: int = Field(alias="id")
+    pokemon_id: int
     title_ru: str
     img_url: str
 

@@ -1,12 +1,20 @@
-from django.db import models # type: ignore
+from typing import ClassVar
+
+from django.db import models  # type: ignore
 
 
 class Pokemon(models.Model):
     img_file = models.ImageField(upload_to="pokemons/")
     title_ru = models.CharField(max_length=200, verbose_name="наименование рус")
-    title_en = models.CharField(max_length=200, blank=True, verbose_name="наименование англ")
-    title_jp = models.CharField(max_length=200, blank=True, verbose_name="наименование яп")
-    description = models.TextField(max_length=10000, blank=True, verbose_name="описание")
+    title_en = models.CharField(
+        max_length=200, blank=True, verbose_name="наименование англ"
+    )
+    title_jp = models.CharField(
+        max_length=200, blank=True, verbose_name="наименование яп"
+    )
+    description = models.TextField(
+        max_length=10000, blank=True, verbose_name="описание"
+    )
     previous_evolution = models.ForeignKey(
         "self",
         blank=True,
@@ -33,8 +41,12 @@ class PokemonEntity(models.Model):
     )
     lat = models.FloatField(verbose_name="широта")
     lon = models.FloatField(verbose_name="долгота")
-    appeared_at = models.DateTimeField(blank=True, null=True, verbose_name="время появления")
-    disappeared_at = models.DateTimeField(blank=True, null=True, verbose_name="время исчезания")
+    appeared_at = models.DateTimeField(
+        blank=True, null=True, verbose_name="время появления"
+    )
+    disappeared_at = models.DateTimeField(
+        blank=True, null=True, verbose_name="время исчезания"
+    )
     level = models.IntegerField(default=0, blank=True, verbose_name="уровень")
     health = models.IntegerField(default=0, blank=True, verbose_name="здоровье")
     strength = models.IntegerField(default=0, blank=True, verbose_name="сила")
@@ -44,7 +56,7 @@ class PokemonEntity(models.Model):
     class Meta:
         verbose_name = "Сущность покемона"
         verbose_name_plural = "Сущности покемонов"
-        indexes = [
+        indexes: ClassVar[list[models.Index]] = [
             models.Index(fields=["lat", "lon"]),
             models.Index(fields=["appeared_at"]),
         ]

@@ -16,9 +16,9 @@
   </nav>
 
   <main class="container my-5">
-    <div class="row mb-4">
-      <div class="col-auto">
-        <img src="{{ pokemon.img_url }}" alt="{{ pokemon.title_ru }}" style="width: 200px; height: 200px; object-fit: contain;">
+    <div class="row mb-4 align-items-center">
+      <div class="col-auto text-center">
+        <img src="{{ pokemon.img_url }}" alt="{{ pokemon.title_ru }}" style="width: 300px; height: 300px; object-fit: contain;">
       </div>
       <div class="col">
         <h1>{{ pokemon.title_ru }}</h1>
@@ -34,13 +34,13 @@
         {% if pokemon.next_evolution or pokemon.previous_evolution %}
           <hr>
           <h4>Эволюции</h4>
-          <div class="d-flex gap-3">
+          <div class="d-flex gap-3 flex-wrap">
             {% if pokemon.previous_evolution %}
               <a href="{% url 'pokemon_detail' pokemon.previous_evolution.pokemon_id %}" class="text-decoration-none">
-                <div class="card" style="width: 150px;">
-                  <img src="{{ pokemon.previous_evolution.img_url }}" class="card-img-top p-2" alt="{{ pokemon.previous_evolution.title_ru }}" style="height: 100px; object-fit: contain;">
-                  <div class="card-body p-2 text-center">
-                    <small class="text-muted">Из кого</small>
+                <div class="card" style="width: 180px;">
+                  <div class="card-body text-center p-3">
+                    <img src="{{ pokemon.previous_evolution.img_url }}" class="mb-2" alt="{{ pokemon.previous_evolution.title_ru }}" style="width: 100px; height: 100px; object-fit: contain;">
+                    <p class="mb-1 text-muted small">Из кого</p>
                     <p class="mb-0 fw-bold">{{ pokemon.previous_evolution.title_ru }}</p>
                   </div>
                 </div>
@@ -48,10 +48,10 @@
             {% endif %}
             {% if pokemon.next_evolution %}
               <a href="{% url 'pokemon_detail' pokemon.next_evolution.pokemon_id %}" class="text-decoration-none">
-                <div class="card" style="width: 150px;">
-                  <img src="{{ pokemon.next_evolution.img_url }}" class="card-img-top p-2" alt="{{ pokemon.next_evolution.title_ru }}" style="height: 100px; object-fit: contain;">
-                  <div class="card-body p-2 text-center">
-                    <small class="text-muted">В кого</small>
+                <div class="card" style="width: 180px;">
+                  <div class="card-body text-center p-3">
+                    <img src="{{ pokemon.next_evolution.img_url }}" class="mb-2" alt="{{ pokemon.next_evolution.title_ru }}" style="width: 100px; height: 100px; object-fit: contain;">
+                    <p class="mb-1 text-muted small">В кого</p>
                     <p class="mb-0 fw-bold">{{ pokemon.next_evolution.title_ru }}</p>
                   </div>
                 </div>
@@ -64,7 +64,7 @@
 
     <section>
       <h2 class="mb-3">Карта {{ pokemon.title_ru }} в Москве</h2>
-      <div class="border rounded p-2">
+      <div class="border rounded" style="height: 500px;">
         {{ map|safe }}
       </div>
     </section>
